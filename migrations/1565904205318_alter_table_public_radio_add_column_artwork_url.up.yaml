@@ -1,0 +1,3 @@
+- args:
+    sql: ALTER TABLE "public"."radio" ADD COLUMN "artwork_url" text NOT NULL;
+  type: run_sql

@@ -1,0 +1,11 @@
+- args:
+    sql: CREATE TABLE "public"."radio_track"("radio_id" uuid NOT NULL, "track_id"
+      uuid NOT NULL, PRIMARY KEY ("radio_id","track_id") , FOREIGN KEY ("radio_id")
+      REFERENCES "public"."radio"("id") ON UPDATE cascade ON DELETE cascade, FOREIGN
+      KEY ("track_id") REFERENCES "public"."track"("id") ON UPDATE cascade ON DELETE
+      set null);
+  type: run_sql
+- args:
+    name: radio_track
+    schema: public
+  type: add_existing_table_or_view

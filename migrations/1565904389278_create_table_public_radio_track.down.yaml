@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."radio_track"
+  type: run_sql
