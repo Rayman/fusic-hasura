@@ -9,8 +9,6 @@ import makeApolloClient from './apollo';
 import * as serviceWorker from './serviceWorker';
 
 const client = makeApolloClient();
-console.log('client:', client);
-
 ReactDOM.render(
   <ApolloProvider client={client}>
     <App />
