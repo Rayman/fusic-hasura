@@ -1,0 +1,7 @@
+- args:
+    definition:
+      forward_client_headers: false
+      headers: []
+      url_from_env: FUSIC_BACKEND_URL
+    name: FusicBackend
+  type: add_remote_schema
