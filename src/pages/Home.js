@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { useSubscription, useMutation } from '@apollo/react-hooks';
 
@@ -35,7 +36,9 @@ function RadioList() {
     <ul>
       {radios.map(({ id, title, artwork_url }) => (
         <li key={id}>
-          {id} - {title}
+          <Link to={`/radio/${id}`}>
+            {id} - {title}
+          </Link>
         </li>
       ))}
     </ul>
@@ -75,6 +78,7 @@ export default function Home() {
     <div className="Home">
       <h1>Radio list:</h1>
       <RadioList />
+      <h1>Create a new radio:</h1>
       <CreateRadio />
     </div>
   );
