@@ -66,7 +66,11 @@ function getSchema({
   const typeDefs = gql`
     ${printSchema(schema)}
   `;
-  return { typeDefs, resolvers };
+  console.log(Object.keys(schema));
+  console.log(Object.keys(typeDefs));
+  // console.log(typeDefs);
+
+  return { typeDefs: schema, resolvers };
 }
 
 const typeDefs2 = gql`
