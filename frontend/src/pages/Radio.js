@@ -1,4 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+
+import './Radio.css';
+
+const SEARCH_SONG = gql`
+  query($q: String!) {
+    search(q: $q) {
+      id
+      title
+    }
+  }
+`;
+
+function SearchResults({ q }) {
+  console.log(q);
+  const { data, error, loading } = useQuery(SEARCH_SONG, { variables: { q } });
+  if (loading) return 'Loading...';
+
+  if (error) throw error;
+
+  return <code>{'Result:' + JSON.stringify(data)}</code>;
+}
+
+function AddSong() {
+  const [q, setQ] = useState();
+
+  function onSubmit(e) {
+    e.preventDefault();
+
+    const search = e.target['search'].value;
+    setQ(search);
+  }
+
+  return (
+    <>
+      <form onSubmit={onSubmit}>
+        <h2>Add a song</h2>
+        <input type="search" name="search" placeholder="search..." />
+        <input type="submit" value="Search!" />
+      </form>
+      {q && <SearchResults q={q} />}
+    </>
+  );
+}
 
 export default function Radio({
   match: {
@@ -6,8 +51,12 @@ export default function Radio({
   },
 }) {
   return (
-    <main>
+    <main className="Radio">
       <h1>Radio (id={id})</h1>
+      <AddSong />
+      <ul>
+        <li>song</li>
+      </ul>
     </main>
   );
 }
