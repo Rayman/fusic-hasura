@@ -1,0 +1,13 @@
+- args:
+    name: FusicBackend
+  type: remove_remote_schema
+- args:
+    definition:
+      forward_client_headers: false
+      headers:
+      - name: key
+        value_from_env: FUSIC_YOUTUBE_KEY
+      timeout_seconds: 60
+      url_from_env: FUSIC_BACKEND_URL
+    name: FusicBackend
+  type: add_remote_schema
