@@ -1,29 +1,34 @@
 const { gql, ApolloServer, UserInputError } = require('apollo-server');
 const { RESTDataSource } = require('apollo-datasource-rest');
+var assert = require('assert');
 
 const typeDefs = gql`
   type SearchResult {
-    name: String
+    id: String
+    title: String
   }
 
   type Query {
-    search: [SearchResult]
-    search2(q: String!): [SearchResult]
+    search(q: String!): [SearchResult]
   }
 `;
 
 const resolvers = {
   Query: {
-    search(parent, args, context, info) {
-      return [{ name: 'omg' }]; //find(authors, { id: args.id });
-    },
-    search2(parent, { q }, { dataSources }, info) {
-      return dataSources.youtubeAPI.search(q);
+    async search(parent, { q }, { dataSources }, info) {
+      const result = await dataSources.youtubeAPI.search(q);
+      return result.items;
     }
   },
   SearchResult: {
-    name(result) {
-      return 'bla' + result.name;
+    id(result) {
+      assert.equal(result.id.kind, 'youtube#video');
+      return result.id.videoId;
+    },
+
+    title(result) {
+      assert.equal(result.kind, 'youtube#searchResult');
+      return result.snippet.title;
     }
   }
 };
@@ -40,11 +45,11 @@ class YoutubeAPI extends RESTDataSource {
     request.params.set('key', this.context.key);
   }
 
-  // an example making an HTTP DELETE request
   search(q) {
     return this.get('search', {
       q,
-      part: 'snippet'
+      part: 'snippet',
+      type: 'video'
     });
   }
 }
