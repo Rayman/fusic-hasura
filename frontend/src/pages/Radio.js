@@ -51,8 +51,11 @@ export default function Radio({
   },
 }) {
   return (
-    <main className="Radio">
-      <h1>Radio (id={id})</h1>
+    <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1>Radio</h1>
+        <h4>id={id}</h4>
+      </div>
       <AddSong />
       <ul>
         <li>song</li>

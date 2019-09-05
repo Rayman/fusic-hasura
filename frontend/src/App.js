@@ -10,16 +10,14 @@ import NoMatch from './pages/NoMatch';
 function App() {
   return (
     <Router>
-      <>
-        <Header />
-
+      <Header>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/radio/:id" component={Radio} />
           <Route component={NoMatch} />
         </Switch>
-      </>
+      </Header>
     </Router>
   );
 }

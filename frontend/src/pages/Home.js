@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
 import { useSubscription, useMutation } from '@apollo/react-hooks';
 
@@ -27,14 +27,14 @@ const INSERT_RADIO_MUTATION = gql`
 `;
 
 function RadioList() {
-  const { loading, error, data } = useSubscription(RADIOS_SUBSCRIPTION);
+  const { loading, data } = useSubscription(RADIOS_SUBSCRIPTION);
 
   if (loading) return <div>Loading...</div>;
 
   const { radio: radios } = data;
   return (
     <ul>
-      {radios.map(({ id, title, artwork_url }) => (
+      {radios.map(({ id, title }) => (
         <li key={id}>
           <Link to={`/radio/${id}`}>
             {id} - {title}
@@ -46,7 +46,7 @@ function RadioList() {
 }
 
 function CreateRadio() {
-  const [addRadio, { returnData }] = useMutation(INSERT_RADIO_MUTATION);
+  const [addRadio] = useMutation(INSERT_RADIO_MUTATION);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -73,13 +73,16 @@ function CreateRadio() {
   );
 }
 
-export default function Home() {
+export default function Home2() {
   return (
-    <div className="Home">
-      <h1>Radio list:</h1>
+    <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1>Radio list:</h1>
+      </div>
+
       <RadioList />
       <h1>Create a new radio:</h1>
       <CreateRadio />
-    </div>
+    </main>
   );
 }

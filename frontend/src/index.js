@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 
+// import before app styles
+import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 
 import App from './App';
