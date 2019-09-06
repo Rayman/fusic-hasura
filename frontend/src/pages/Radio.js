@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
 
 import './Radio.css';
 
@@ -13,11 +13,21 @@ const SEARCH_SONG = gql`
   }
 `;
 
+const RADIOS_SUBSCRIPTION = gql`
+  subscription($id: uuid!) {
+    radio_by_pk(id: $id) {
+      id
+      created_at
+      artwork_url
+      title
+    }
+  }
+`;
+
 function SearchResults({ q }) {
   console.log(q);
   const { data, error, loading } = useQuery(SEARCH_SONG, { variables: { q } });
   if (loading) return 'Loading...';
-
   if (error) throw error;
 
   return <code>{'Result:' + JSON.stringify(data)}</code>;
@@ -50,11 +60,22 @@ export default function Radio({
     params: { id },
   },
 }) {
+  const { loading, data, error } = useSubscription(RADIOS_SUBSCRIPTION, {
+    variables: { id },
+  });
+
+  if (loading) return 'Loading...';
+  if (error) throw error;
+
+  const {
+    radio_by_pk: { title, created_at, artwork_url },
+  } = data;
+
   return (
     <main role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1>Radio</h1>
-        <h4>id={id}</h4>
+        <h1>{title}</h1>
+        <p class="lead">Created {created_at}</p>
       </div>
       <AddSong />
       <ul>
