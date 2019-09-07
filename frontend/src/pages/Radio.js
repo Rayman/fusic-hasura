@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
+import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 
 import { Edit } from 'react-feather';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 
 import './Radio.css';
 
@@ -26,6 +27,17 @@ const RADIOS_SUBSCRIPTION = gql`
       created_at
       artwork_url
       title
+    }
+  }
+`;
+
+const UPDATE_RADIO = gql`
+  mutation($id: uuid, $title: String!, $artwork_url: String!) {
+    update_radio(
+      _set: { title: $title, artwork_url: $artwork_url }
+      where: { id: { _eq: $id } }
+    ) {
+      affected_rows
     }
   }
 `;
@@ -62,23 +74,47 @@ function AddSong() {
 }
 
 function EditRadio({ show, onHide, radio: { id, title, artwork_url } }) {
-  function onSave(e) {}
+  const [updateRadio, { loading, error, called }] = useMutation(UPDATE_RADIO);
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    updateRadio({ variables: { id, ...data } }).then(() => {
+      onHide();
+    });
+  }
 
   return (
     <>
       <Modal show={show} onHide={onHide}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={onSave}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
+        <Form onSubmit={onSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit radio details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group controlId="formRadioTitle">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text" name="title" defaultValue={title} />
+            </Form.Group>
+
+            <Form.Group controlId="formRadioArtworkUrl">
+              <Form.Label>Artwork url</Form.Label>
+              <Form.Control
+                type="url"
+                name="artwork_url"
+                defaultValue={artwork_url}
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={onHide}>
+              Close
+            </Button>
+            <Button variant="primary" type="submit" disabled={loading}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );
