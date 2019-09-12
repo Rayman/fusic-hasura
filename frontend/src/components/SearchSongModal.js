@@ -9,7 +9,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 
-const SEARCH_SONG = gql`
+export const SEARCH_SONG = gql`
   query($q: String!) {
     search(q: $q) {
       id

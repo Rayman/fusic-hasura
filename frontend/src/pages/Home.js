@@ -5,7 +5,7 @@ import { useSubscription, useMutation } from '@apollo/react-hooks';
 
 import './Home.css';
 
-const RADIOS_SUBSCRIPTION = gql`
+export const RADIOS_SUBSCRIPTION = gql`
   subscription {
     radio {
       id
