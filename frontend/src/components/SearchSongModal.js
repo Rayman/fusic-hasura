@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 
 import Button from 'react-bootstrap/Button';
@@ -9,30 +9,23 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 
-export const SEARCH_SONG = gql`
-  query($q: String!) {
-    search(q: $q) {
-      id
-      title
-    }
-  }
-`;
-
-function SearchResults({ q }) {
-  console.log(q);
-  const { data, error, loading } = useQuery(SEARCH_SONG, { variables: { q } });
+function SearchResults({ data, loading, error }) {
   if (loading) return 'Loading...';
   if (error) throw error;
 
   return <code>{'Result:' + JSON.stringify(data)}</code>;
 }
 
-export default function SearchSongModal({ show, onHide }) {
-  const [q, setQ] = useState('');
+SearchSongModal.propTypes = {
+  data: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.object,
+};
 
+export function SearchSongModal({ show, onHide, onSearch, result }) {
   function onSubmit(e) {
     e.preventDefault();
-    setQ(e.target['q'].value);
+    onSearch(e.target['q'].value);
   }
 
   return (
@@ -51,7 +44,7 @@ export default function SearchSongModal({ show, onHide }) {
             </InputGroup.Append>
           </InputGroup>
         </Form>
-        {q && <SearchResults q={q} />}
+        <SearchResults {...result} />
       </Modal.Body>
     </Modal>
   );
@@ -60,5 +53,41 @@ export default function SearchSongModal({ show, onHide }) {
 SearchSongModal.propTypes = {
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
-  radio_id: PropTypes.string.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  result: PropTypes.shape({
+    data: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.object,
+  }).isRequired,
+};
+
+export const SEARCH_SONG = gql`
+  query($q: String!) {
+    search(q: $q) {
+      id
+      title
+    }
+  }
+`;
+
+export default function SearchSongModalContainer({ show, onHide }) {
+  const [search, result] = useLazyQuery(SEARCH_SONG);
+
+  function onSearch(q) {
+    search({ variables: { q } });
+  }
+
+  return (
+    <SearchSongModal
+      show={show}
+      onHide={onHide}
+      onSearch={onSearch}
+      result={result}
+    />
+  );
+}
+
+SearchSongModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired,
 };
