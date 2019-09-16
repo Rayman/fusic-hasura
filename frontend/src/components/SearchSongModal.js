@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import gql from 'graphql-tag';
 import { useLazyQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
@@ -8,12 +8,50 @@ import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
+import Spinner from 'react-bootstrap/Spinner';
+import Media from 'react-bootstrap/Media';
+
+export const SEARCH_SONG = gql`
+  query($q: String!) {
+    search(q: $q) {
+      id
+      title
+      description
+      thumbnail
+    }
+  }
+`;
 
 function SearchResults({ data, loading, error }) {
-  if (loading) return 'Loading...';
+  if (loading)
+    return (
+      <p>
+        Loading <Spinner as="span" size="sm" animation="grow" />
+      </p>
+    );
   if (error) throw error;
+  if (!data) return null;
 
-  return <code>{'Result:' + JSON.stringify(data)}</code>;
+  console.log(data);
+  return (
+    <ul className="list-unstyled">
+      {data.search.map((r, i) => (
+        <Media as="li" key={i}>
+          <img
+            width={64}
+            height={64}
+            className="mr-3"
+            src={r.thumbnail}
+            alt=""
+          />
+          <Media.Body>
+            <h5>{r.title}</h5>
+            <p>{r.description}</p>
+          </Media.Body>
+        </Media>
+      ))}
+    </ul>
+  );
 }
 
 SearchSongModal.propTypes = {
@@ -23,6 +61,13 @@ SearchSongModal.propTypes = {
 };
 
 export function SearchSongModal({ show, onHide, onSearch, result }) {
+  const inputRef = useRef(null);
+
+  // focus input element on first render
+  useEffect(() => {
+    if (show) inputRef.current.focus();
+  }, [show]);
+
   function onSubmit(e) {
     e.preventDefault();
     onSearch(e.target['q'].value);
@@ -36,7 +81,7 @@ export function SearchSongModal({ show, onHide, onSearch, result }) {
       <Modal.Body>
         <Form onSubmit={onSubmit}>
           <InputGroup className="mb-3">
-            <FormControl placeholder="Search..." name="q" />
+            <FormControl placeholder="Search..." name="q" ref={inputRef} />
             <InputGroup.Append>
               <Button type="submit" variant="outline-primary">
                 Search
@@ -60,15 +105,6 @@ SearchSongModal.propTypes = {
     error: PropTypes.object,
   }).isRequired,
 };
-
-export const SEARCH_SONG = gql`
-  query($q: String!) {
-    search(q: $q) {
-      id
-      title
-    }
-  }
-`;
 
 export default function SearchSongModalContainer({ show, onHide }) {
   const [search, result] = useLazyQuery(SEARCH_SONG);

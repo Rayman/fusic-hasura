@@ -4,8 +4,10 @@ var assert = require('assert');
 
 const typeDefs = gql`
   type SearchResult {
-    id: String
-    title: String
+    id: String!
+    title: String!
+    description: String!
+    thumbnail: String!
   }
 
   type Query {
@@ -17,6 +19,7 @@ const resolvers = {
   Query: {
     async search(parent, { q }, { dataSources }, info) {
       const result = await dataSources.youtubeAPI.search(q);
+      assert.equal(result.kind, 'youtube#searchListResponse');
       return result.items;
     }
   },
@@ -27,8 +30,15 @@ const resolvers = {
     },
 
     title(result) {
-      assert.equal(result.kind, 'youtube#searchResult');
       return result.snippet.title;
+    },
+
+    description(result) {
+      return result.snippet.description;
+    },
+
+    thumbnail(result) {
+      return result.snippet.thumbnails.default.url;
     }
   }
 };
