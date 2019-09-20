@@ -1,4 +1,5 @@
-const HASURA_GRAPHQL_ENGINE_HOSTNAME = '192.168.1.6:8080';
+const HASURA_HOSTNAME = process.env.REACT_APP_HASURA_HOSTNAME;
+console.assert(HASURA_HOSTNAME, "REACT_APP_HASURA_HOSTNAME not set");
 
 const scheme = proto => {
   return window.location.protocol === 'https:' ? `${proto}s` : proto;
@@ -6,7 +7,7 @@ const scheme = proto => {
 
 export const GRAPHQL_URL = `${scheme(
   'http'
-)}://${HASURA_GRAPHQL_ENGINE_HOSTNAME}/v1/graphql`;
+)}://${HASURA_HOSTNAME}/v1/graphql`;
 export const REALTIME_GRAPHQL_URL = `${scheme(
   'ws'
-)}://${HASURA_GRAPHQL_ENGINE_HOSTNAME}/v1/graphql`;
+)}://${HASURA_HOSTNAME}/v1/graphql`;
