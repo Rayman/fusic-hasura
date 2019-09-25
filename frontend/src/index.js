@@ -8,12 +8,15 @@ import './index.css';
 
 import App from './App';
 import makeApolloClient from './apollo';
+import Auth0Provider from './Auth0Provider';
 import * as serviceWorker from './serviceWorker';
 
 const client = makeApolloClient();
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Auth0Provider>
+      <App />
+    </Auth0Provider>
   </ApolloProvider>,
   document.getElementById('root')
 );

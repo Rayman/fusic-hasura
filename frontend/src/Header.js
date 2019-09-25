@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import Button from 'react-bootstrap/Button';
 import { Home, Radio, Music } from 'react-feather';
 
+import { useAuth } from './Auth';
+
 export default function Header({ children }) {
+  const { login, logout, isAuthenticated } = useAuth();
+
   return (
     <>
       <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -17,9 +23,15 @@ export default function Header({ children }) {
         />
         <ul className="navbar-nav px-3">
           <li className="nav-item text-nowrap">
-            <a className="nav-link" href="/">
-              Sign out
-            </a>
+            {isAuthenticated() ? (
+              <Button variant="link" className="nav-link" onClick={logout}>
+                Sign Out
+              </Button>
+            ) : (
+              <Button variant="link" className="nav-link" onClick={login}>
+                Sign in
+              </Button>
+            )}
           </li>
         </ul>
       </nav>
