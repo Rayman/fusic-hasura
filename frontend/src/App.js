@@ -5,7 +5,6 @@ import Header from './Header';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Radio from './pages/Radio';
-import Callback from './pages/Callback';
 import NoMatch from './pages/NoMatch';
 
 function App() {
@@ -16,7 +15,6 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/radio/:id" component={Radio} />
-          <Route path="/callback" component={Callback} />
           <Route component={NoMatch} />
         </Switch>
       </Header>

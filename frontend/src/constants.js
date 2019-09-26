@@ -15,6 +15,3 @@ export const REALTIME_GRAPHQL_URL = `${scheme(
  */
 export const auth0ClientId = 'O2vvZXmJUBX5PdxYdx34a3pJxc7ZSEF2';
 export const auth0Domain = 'fusic.eu.auth0.com';
-export const auth0CallbackUrl = `${scheme(
-  'http'
-)}://${HASURA_HOSTNAME}/callback`;

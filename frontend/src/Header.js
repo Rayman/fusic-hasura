@@ -7,7 +7,7 @@ import { Home, Radio, Music } from 'react-feather';
 import { useAuth } from './Auth';
 
 export default function Header({ children }) {
-  const { login, logout, isAuthenticated } = useAuth();
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth();
 
   return (
     <>
@@ -23,12 +23,16 @@ export default function Header({ children }) {
         />
         <ul className="navbar-nav px-3">
           <li className="nav-item text-nowrap">
-            {isAuthenticated() ? (
+            {isAuthenticated ? (
               <Button variant="link" className="nav-link" onClick={logout}>
                 Sign Out
               </Button>
             ) : (
-              <Button variant="link" className="nav-link" onClick={login}>
+              <Button
+                variant="link"
+                className="nav-link"
+                onClick={loginWithRedirect}
+              >
                 Sign in
               </Button>
             )}
