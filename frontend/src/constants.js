@@ -1,17 +1,28 @@
-const HASURA_HOSTNAME = process.env.REACT_APP_HASURA_HOSTNAME;
-console.assert(HASURA_HOSTNAME, 'REACT_APP_HASURA_HOSTNAME not set');
+const HASURA_ORIGIN = process.env.REACT_APP_HASURA_ORIGIN;
+console.assert(HASURA_ORIGIN, 'REACT_APP_HASURA_ORIGIN not set');
 
-const scheme = proto => {
-  return window.location.protocol === 'https:' ? `${proto}s` : proto;
-};
+const graphql_url = new URL(HASURA_ORIGIN);
+graphql_url.pathname = '/v1/graphql';
+export const GRAPHQL_URL = graphql_url.href;
 
-export const GRAPHQL_URL = `${scheme('http')}://${HASURA_HOSTNAME}/v1/graphql`;
-export const REALTIME_GRAPHQL_URL = `${scheme(
-  'ws'
-)}://${HASURA_HOSTNAME}/v1/graphql`;
+graphql_url.protocol = correspondingWsProtocol(graphql_url.protocol);
+export const REALTIME_GRAPHQL_URL = graphql_url;
 
 /**
  * Auth0
  */
 export const auth0ClientId = 'O2vvZXmJUBX5PdxYdx34a3pJxc7ZSEF2';
 export const auth0Domain = 'fusic.eu.auth0.com';
+
+function correspondingWsProtocol(protocol) {
+  switch (graphql_url.protocol) {
+    case 'https:':
+      return 'wss:';
+    case 'http:':
+      return 'ws:';
+    default:
+      throw new Error(
+        `REACT_APP_HASURA_ORIGIN has unknown protocol ${protocol}`
+      );
+  }
+}
