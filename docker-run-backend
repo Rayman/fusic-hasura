@@ -1,4 +1,3 @@
 #!/bin/bash
 
-# sudo -E = preserve their existing environment variables.
-sudo -E docker run --network=host -it -e DATABASE_URL=postgres://hasurauser:hasurauser@localhost/hasura -e FUSIC_YOUTUBE_KEY -e PORT fusic
+docker run --network=host -it -e DATABASE_URL=postgres://hasurauser:hasurauser@localhost/hasura -e FUSIC_YOUTUBE_KEY -e PORT fusic
