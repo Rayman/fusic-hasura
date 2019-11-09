@@ -1,4 +1,5 @@
 import ApolloClient from 'apollo-client';
+import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
@@ -8,25 +9,39 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import { GRAPHQL_URL, REALTIME_GRAPHQL_URL } from './constants';
 
-const getHeaders = () => {
+const getHeaders = tokenRef => {
   const headers = {};
-  // const token = auth.getIdToken();
-  // if (token) {
-  //   headers.authorization = `Bearer ${token}`;
-  // }
+  if (tokenRef.current) {
+    headers.authorization = `Bearer ${tokenRef.current}`;
+  }
+  console.log('getHeaders', headers);
   return headers;
 };
 
-const makeApolloClient = () => {
+const makeApolloClient = tokenRef => {
+  console.log('makeApolloClient');
+
   // Create an http link:
-  const httpLink = new HttpLink({
+  let httpLink = new HttpLink({
     uri: GRAPHQL_URL,
     fetch,
-    headers: getHeaders(),
   });
+  const middlewareLink = new ApolloLink((operation, forward) => {
+    const token = tokenRef.current;
+    console.log('in the link...', token);
+    if (token) {
+      operation.setContext({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+    return forward(operation);
+  });
+  httpLink = middlewareLink.concat(httpLink);
 
   // Create a WebSocket link:
-
+  
   const wsLink = new WebSocketLink(
     new SubscriptionClient(REALTIME_GRAPHQL_URL, {
       reconnect: true,

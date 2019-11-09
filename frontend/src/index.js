@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 
@@ -8,16 +8,28 @@ import './index.css';
 
 import App from './App';
 import makeApolloClient from './apollo';
+import { useAuth } from './Auth';
 import Auth0Provider from './Auth0Provider';
 import * as serviceWorker from './serviceWorker';
 
-const client = makeApolloClient();
-ReactDOM.render(
-  <ApolloProvider client={client}>
-    <Auth0Provider>
+function Wrapper() {
+  const { token } = useAuth();
+  const tokenRef = useRef(token);
+  tokenRef.current = token;
+
+  // makeApolloClient should only be called once
+  const client = useMemo(() => makeApolloClient(tokenRef), []);
+  return (
+    <ApolloProvider client={client}>
       <App />
-    </Auth0Provider>
-  </ApolloProvider>,
+    </ApolloProvider>
+  );
+}
+
+ReactDOM.render(
+  <Auth0Provider>
+    <Wrapper />
+  </Auth0Provider>,
   document.getElementById('root')
 );
 

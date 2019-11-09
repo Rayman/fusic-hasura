@@ -7,6 +7,7 @@ import { Auth0Context } from './Auth';
 export default function Auth0Provider({ children }) {
   const [auth0, setAuth0] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
 
   function loginWithRedirect() {
     console.log('loginWithRedirect');
@@ -59,11 +60,40 @@ export default function Auth0Provider({ children }) {
     }
   }, [auth0]);
 
+  /**
+   * Every x seconds, call getTokenSilently and update the context token
+   * The getTokenSilently call is an async function, so let's do a setTimeout loop to prevent calling this method while it's busy
+   */
+  let timerId = -1;
+  useEffect(() => {
+    function checkToken() {
+      if (auth0) {
+        console.debug('checking auth0 token...');
+        auth0.getIdTokenClaims().then(({ __raw: newToken }) => {
+          if (newToken !== token) {
+            console.log(newToken);
+            setToken(newToken);
+          }
+          timerId = setTimeout(checkToken, 5000);
+        });
+      } else {
+        timerId = setTimeout(checkToken, 5000);
+      }
+    }
+
+    clearTimeout(timerId);
+    checkToken();
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [auth0, token]);
+
   const context = {
     isAuthenticated,
     loginWithRedirect,
     loginWithPopup,
     logout,
+    token,
   };
 
   return (

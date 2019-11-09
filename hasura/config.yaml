@@ -1,4 +1,4 @@
-# endpoint: http://localhost:8080
+endpoint: http://localhost:8080
 # endpoint: http://192.168.1.6:8080
 # endpoint: https://fusic-hasura.herokuapp.com
-endpoint: https://fusic-hasura-dev.herokuapp.com
+#endpoint: https://fusic-hasura-dev.herokuapp.com
