@@ -1,3 +1,9 @@
 #!/bin/bash
 
-docker run --network=host -it -e DATABASE_URL=postgres://hasurauser:hasurauser@localhost/hasura -e FUSIC_YOUTUBE_KEY -e PORT fusic
+docker run --network=host -it \
+    -e DATABASE_URL=postgres://hasurauser:hasurauser@localhost/hasura \
+    -e PORT \
+    -e FUSIC_YOUTUBE_KEY \
+    -e HASURA_GRAPHQL_ADMIN_SECRET \
+    -e HASURA_GRAPHQL_JWT_SECRET \
+    fusic
