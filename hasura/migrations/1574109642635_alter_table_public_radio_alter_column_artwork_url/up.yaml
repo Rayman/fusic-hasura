@@ -1,0 +1,6 @@
+- args:
+    sql: ALTER TABLE "public"."radio" ALTER COLUMN "artwork_url" DROP NOT NULL;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."radio"."artwork_url" IS E''
+  type: run_sql

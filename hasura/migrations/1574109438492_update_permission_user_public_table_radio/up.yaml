@@ -1,0 +1,15 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - artwork_url
+      - title
+      - created_at
+      - id
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: radio
+      schema: public
+  type: create_select_permission
