@@ -1,9 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import gql from 'graphql-tag';
-import { useSubscription, useMutation } from '@apollo/react-hooks';
+import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks';
 
 import './Home.css';
+
+export const RADIOS_QUERY = gql`
+  query {
+    radio {
+      id
+      created_at
+      artwork_url
+      title
+    }
+  }
+`;
 
 export const RADIOS_SUBSCRIPTION = gql`
   subscription {
@@ -27,9 +38,16 @@ const INSERT_RADIO_MUTATION = gql`
 `;
 
 function RadioList() {
-  const { loading, data } = useSubscription(RADIOS_SUBSCRIPTION);
+  const { loading, data, error } = useQuery(RADIOS_QUERY);
 
   if (loading) return <div>Loading...</div>;
+  if (error)
+    return (
+      <>
+        <h4>Error</h4>
+        <pre>{JSON.stringify(error, null, 2)}</pre>
+      </>
+    );
 
   const { radio: radios } = data;
   return (
