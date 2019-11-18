@@ -10,5 +10,6 @@ sleep 3
 FUSIC_BACKEND_URL="http://localhost:$BACKEND_PORT" graphql-engine \
   --database-url ${DATABASE_URL?"env DATABASE_URL missing"} \
   serve \
+  --unauthorized-role anonymous \
   --server-port "$PORT"
 
