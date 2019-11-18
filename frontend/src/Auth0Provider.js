@@ -69,7 +69,12 @@ export default function Auth0Provider({ children }) {
     function checkToken() {
       if (auth0) {
         console.debug('checking auth0 token...');
-        auth0.getIdTokenClaims().then(({ __raw: newToken }) => {
+        auth0.getIdTokenClaims().then(claims => {
+          if (!claims) {
+            if (token) setToken(null);
+            return;
+          }
+          const newToken = claims.__raw;
           if (newToken !== token) {
             console.log(newToken);
             setToken(newToken);
