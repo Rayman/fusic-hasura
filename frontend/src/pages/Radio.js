@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import gql from 'graphql-tag';
+import { gql } from 'graphql.macro';
 import { useSubscription } from '@apollo/react-hooks';
 
 import { Edit, PlusCircle } from 'react-feather';

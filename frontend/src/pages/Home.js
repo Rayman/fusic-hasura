@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import gql from 'graphql-tag';
+import { gql } from 'graphql.macro';
 import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks';
 
 import './Home.css';

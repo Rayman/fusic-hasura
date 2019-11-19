@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import gql from 'graphql-tag';
+import { gql } from 'graphql.macro';
 import { useLazyQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 
