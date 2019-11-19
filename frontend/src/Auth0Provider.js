@@ -64,8 +64,8 @@ export default function Auth0Provider({ children }) {
    * Every x seconds, call getTokenSilently and update the context token
    * The getTokenSilently call is an async function, so let's do a setTimeout loop to prevent calling this method while it's busy
    */
-  let timerId = -1;
   useEffect(() => {
+    let timerId = -1;
     function checkToken() {
       if (auth0) {
         console.debug('checking auth0 token...');
