@@ -14,7 +14,6 @@ const getHeaders = tokenRef => {
   if (tokenRef.current) {
     headers.authorization = `Bearer ${tokenRef.current}`;
   }
-  console.log('getHeaders', headers);
   return headers;
 };
 
@@ -27,30 +26,20 @@ const makeApolloClient = tokenRef => {
     fetch,
   });
   const middlewareLink = new ApolloLink((operation, forward) => {
-    const token = tokenRef.current;
-    console.log('in the link...', token);
-    if (token) {
-      operation.setContext({
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    }
+    operation.setContext({ headers: getHeaders(tokenRef) });
     return forward(operation);
   });
   httpLink = middlewareLink.concat(httpLink);
 
-  // Create a WebSocket link:
-  
   const wsLink = new WebSocketLink(
     new SubscriptionClient(REALTIME_GRAPHQL_URL, {
       reconnect: true,
-      timeout: 30000,
       connectionParams: () => {
-        return { headers: getHeaders() };
+        return { headers: getHeaders(tokenRef) };
       },
       connectionCallback: err => {
         if (err) {
+          console.error('connectionCallback:', err);
           wsLink.subscriptionClient.close(false, false);
         }
       },
