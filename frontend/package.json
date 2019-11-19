@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/react-hooks": "3.0.0",
-    "@apollo/react-testing": "3.0.0",
+    "@apollo/react-hooks": "^3.1.0",
+    "@apollo/react-testing": "^3.1.0",
     "@auth0/auth0-spa-js": "^1.5.0",
     "@testing-library/jest-dom": "^4.2.3",
     "@testing-library/react": "^9.3.2",
@@ -51,11 +51,11 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.7.0",
-    "@storybook/addon-actions": "^5.2.5",
-    "@storybook/addon-links": "^5.2.5",
-    "@storybook/addons": "^5.2.5",
-    "@storybook/react": "^5.2.5",
+    "@babel/core": "^7.7.2",
+    "@storybook/addon-actions": "^5.2.6",
+    "@storybook/addon-links": "^5.2.6",
+    "@storybook/addons": "^5.2.6",
+    "@storybook/react": "^5.2.6",
     "babel-loader": "^8.0.6"
   }
 }
