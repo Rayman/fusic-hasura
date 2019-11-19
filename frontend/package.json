@@ -32,6 +32,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --single-quote --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -56,6 +57,7 @@
     "@storybook/addon-links": "^5.2.6",
     "@storybook/addons": "^5.2.6",
     "@storybook/react": "^5.2.6",
-    "babel-loader": "^8.0.6"
+    "babel-loader": "^8.0.6",
+    "source-map-explorer": "^2.1.1"
   }
 }
