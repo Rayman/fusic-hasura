@@ -22,9 +22,15 @@ FROM ubuntu
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     ca-certificates \
     dumb-init \
+    gettext-base \
     libpq5 \
+    nginx \
     npm \
     && rm -rf /var/lib/apt/lists/*
+
+COPY docker/default.conf.template /etc/nginx/conf.d/default.conf.template
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+# COPY static-html /usr/share/nginx/html
 
 COPY --from=hasura /bin/graphql-engine /usr/bin/
 COPY --from=hasura /bin/hasura-cli /usr/bin/
