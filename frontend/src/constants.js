@@ -1,12 +1,13 @@
-const HASURA_ORIGIN = process.env.REACT_APP_HASURA_ORIGIN;
-console.assert(HASURA_ORIGIN, 'REACT_APP_HASURA_ORIGIN not set');
+const HASURA_ORIGIN = process.env.REACT_APP_HASURA_ORIGIN || window.location.origin;
 
 const graphql_url = new URL(HASURA_ORIGIN);
 graphql_url.pathname = '/v1/graphql';
 export const GRAPHQL_URL = graphql_url.href;
+console.log('GRAPHQL_URL:', GRAPHQL_URL);
 
 graphql_url.protocol = correspondingWsProtocol(graphql_url.protocol);
-export const REALTIME_GRAPHQL_URL = graphql_url;
+export const REALTIME_GRAPHQL_URL = graphql_url.href;
+console.log('REALTIME_GRAPHQL_URL:', REALTIME_GRAPHQL_URL);
 
 /**
  * Auth0
