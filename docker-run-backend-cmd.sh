@@ -6,7 +6,7 @@ HASURA_PORT="$((PORT+1))"
 BACKEND_PORT="$((PORT+2))"
 
 echo "hosting nginx on port $PORT"
-PORT="$PORT" envsubst '\$PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+PORT="$PORT" HASURA_PORT="$HASURA_PORT" envsubst '$PORT $HASURA_PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 nginx  # run in the background
 
 echo "hosting backend on port $BACKEND_PORT"
